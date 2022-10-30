@@ -1,4 +1,7 @@
 {
+  "arrowParens": "always",
+  "semi": true,
   "singleQuote": true,
+  "useTabs": false,
   "trailingComma": "all"
 }
