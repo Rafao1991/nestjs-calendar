@@ -11,7 +11,49 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String
+  id            Int             @id @default(autoincrement())
+  email         String          @unique
+  name          String
+  event         Event[]
+  eventAttendee EventAttendee[]
+  reminder      ReminderUser[]
+}
+
+model Event {
+  id            Int             @id @default(autoincrement())
+  title         String
+  content       String?
+  startDate     DateTime        @default(now())
+  duration      Int
+  private       Boolean         @default(false)
+  organizer     User?           @relation(fields: [userId], references: [id])
+  userId        Int?
+  eventAttendee EventAttendee[]
+  reminder      Reminder[]
+}
+
+model EventAttendee {
+  id         Int     @id @default(autoincrement())
+  Event      Event   @relation(fields: [eventId], references: [id])
+  eventId    Int
+  attendee   User    @relation(fields: [userId], references: [id])
+  userId     Int
+  attendance Boolean @default(false)
+}
+
+model Reminder {
+  id        Int            @id @default(autoincrement())
+  Event     Event          @relation(fields: [eventId], references: [id])
+  eventId   Int
+  remindeAt DateTime
+  user      ReminderUser[]
+}
+
+model ReminderUser {
+  reminder   Reminder @relation(fields: [reminderId], references: [id])
+  reminderId Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+
+  @@id([reminderId, userId])
 }
