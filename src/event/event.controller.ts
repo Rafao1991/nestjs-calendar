@@ -54,4 +54,9 @@ export class EventController {
       new Date(timeSpan.end),
     );
   }
+
+  @Post('reminder')
+  createReminder(@Body() reminder: ReminderDTO) {
+    return this.eventService.createReminder(reminder);
+  }
 }

@@ -21,3 +21,10 @@ interface TimeSpanDTO {
   start: string;
   end: string;
 }
+
+interface ReminderDTO {
+  id?: number;
+  eventId?: number;
+  remindeAt: Date;
+  userId?: number;
+}

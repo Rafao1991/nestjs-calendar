@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
+import { Event } from '@prisma/client';
 import { EventRepository } from './event.repository';
 import { EventAttendeeRepository } from './eventAttendee.repository';
-import { Event } from '@prisma/client';
+import { ReminderRepository } from './reminder.repository';
 
 @Injectable()
 export class EventService {
   constructor(
     private eventRepository: EventRepository,
     private eventAttendeeRepository: EventAttendeeRepository,
+    private reminderRepository: ReminderRepository,
   ) {}
 
   async create(event: EventDTO) {
@@ -82,5 +84,9 @@ export class EventService {
     }
 
     return resultEvents;
+  }
+
+  createReminder(reminder: ReminderDTO) {
+    return this.reminderRepository.create(reminder);
   }
 }
