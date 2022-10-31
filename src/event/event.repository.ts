@@ -63,4 +63,30 @@ export class EventRepository {
       where,
     });
   }
+
+  async findByUserIdAndTimeSpan(
+    userId: number,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<Event[]> {
+    return this.prisma.event.findMany({
+      where: {
+        AND: [
+          {
+            userId,
+          },
+          {
+            startDate: {
+              gte: startDate,
+            },
+          },
+          {
+            startDate: {
+              lte: endDate,
+            },
+          },
+        ],
+      },
+    });
+  }
 }

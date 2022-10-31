@@ -45,12 +45,22 @@ export class EventAttendeeRepository {
     });
   }
 
-  async update(
-    id: number,
-    eventAttendee: EventAttendeeDTO,
-  ): Promise<EventAttendee> {
-    const where: Prisma.EventAttendeeWhereUniqueInput = { id };
-    const currentEventAttendee = await this.findById(id);
+  async update(eventAttendee: EventAttendeeDTO): Promise<EventAttendee> {
+    const currentEventAttendee = await this.prisma.eventAttendee.findFirst({
+      where: {
+        AND: [
+          {
+            eventId: eventAttendee.eventId,
+          },
+          {
+            userId: eventAttendee.userId,
+          },
+        ],
+      },
+    });
+    const where: Prisma.EventAttendeeWhereUniqueInput = {
+      id: currentEventAttendee.id,
+    };
     const data: Prisma.EventAttendeeCreateInput = {
       event: {
         connect: {
@@ -81,6 +91,39 @@ export class EventAttendeeRepository {
     const where: Prisma.EventAttendeeWhereUniqueInput = { id };
     return this.prisma.eventAttendee.delete({
       where,
+    });
+  }
+
+  async findByUserIdAndTimeSpan(
+    userId: number,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<EventAttendee[]> {
+    return this.prisma.eventAttendee.findMany({
+      where: {
+        AND: [
+          {
+            userId,
+          },
+          {
+            attendance: true,
+          },
+          {
+            event: {
+              startDate: {
+                gte: startDate,
+              },
+            },
+          },
+          {
+            event: {
+              startDate: {
+                lte: endDate,
+              },
+            },
+          },
+        ],
+      },
     });
   }
 }

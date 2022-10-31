@@ -24,17 +24,34 @@ export class EventController {
   }
 
   @Get(':id')
-  findById(@Param('id') id: string) {
+  findById(@Param('id') id: number) {
     return this.eventService.findById(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() event: EventDTO) {
+  update(@Param('id') id: number, @Body() event: EventDTO) {
     return this.eventService.update(+id, event);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.eventService.remove(+id);
+  }
+
+  @Post('answer')
+  answer(@Body() answer: EventAttendeeDTO) {
+    return this.eventService.answer(answer);
+  }
+
+  @Get('user/:id')
+  findByUserIdAndTimeSpan(
+    @Param('id') id: number,
+    @Body() timeSpan: TimeSpanDTO,
+  ) {
+    return this.eventService.findByUserIdAndTimeSpan(
+      +id,
+      new Date(timeSpan.start),
+      new Date(timeSpan.end),
+    );
   }
 }

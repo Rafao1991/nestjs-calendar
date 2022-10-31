@@ -16,3 +16,8 @@ interface EventAttendeeDTO {
   email?: string;
   attendance?: boolean;
 }
+
+interface TimeSpanDTO {
+  start: string;
+  end: string;
+}

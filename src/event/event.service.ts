@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { EventRepository } from './event.repository';
 import { EventAttendeeRepository } from './eventAttendee.repository';
+import { Event } from '@prisma/client';
 
 @Injectable()
 export class EventService {
@@ -36,5 +37,50 @@ export class EventService {
 
   remove(id: number) {
     return this.eventRepository.remove(id);
+  }
+
+  answer(answer: EventAttendeeDTO) {
+    return this.eventAttendeeRepository.update(answer);
+  }
+
+  async findByUserIdAndTimeSpan(userId: number, start: Date, end: Date) {
+    const resultEvents: Event[] = [];
+
+    const events = await this.eventRepository.findByUserIdAndTimeSpan(
+      userId,
+      start,
+      end,
+    );
+
+    const eventAttendees =
+      await this.eventAttendeeRepository.findByUserIdAndTimeSpan(
+        userId,
+        start,
+        end,
+      );
+
+    events.forEach((event) => {
+      if (event.private) {
+        resultEvents.push({
+          id: event.id,
+          title: 'private event',
+          content: '',
+          startDate: event.startDate,
+          duration: event.duration,
+          private: event.private,
+          userId: event.userId,
+        });
+        return;
+      }
+
+      resultEvents.push(event);
+    });
+
+    for (const eventAttendee of eventAttendees) {
+      const event = await this.findById(eventAttendee.eventId);
+      resultEvents.push(event);
+    }
+
+    return resultEvents;
   }
 }
