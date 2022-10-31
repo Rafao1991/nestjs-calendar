@@ -20,7 +20,7 @@ export class UserController {
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.userService.findById(id);
+    return this.userService.findById(+id);
   }
 
   @Get()
@@ -30,11 +30,11 @@ export class UserController {
 
   @Patch(':id')
   update(@Param('id') id: number, @Body() user: UserDTO) {
-    return this.userService.update(id, user);
+    return this.userService.update(+id, user);
   }
 
   @Delete(':id')
   remove(@Param('id') id: number) {
-    return this.userService.remove(id);
+    return this.userService.remove(+id);
   }
 }

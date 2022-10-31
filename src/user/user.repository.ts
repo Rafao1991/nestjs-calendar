@@ -11,7 +11,7 @@ export class UserRepository {
   }
 
   async findById(id: number): Promise<User | null> {
-    const where: Prisma.UserWhereUniqueInput = { id: Number(id) };
+    const where: Prisma.UserWhereUniqueInput = { id };
     return this.prisma.user.findUnique({
       where,
     });
@@ -28,7 +28,7 @@ export class UserRepository {
   }
 
   async update(id: number, user: UserDTO): Promise<User> {
-    const where: Prisma.UserWhereUniqueInput = { id: Number(id) };
+    const where: Prisma.UserWhereUniqueInput = { id };
     const currentUser = await this.findById(id);
     const data: Prisma.UserCreateInput = {
       name: user.name ? user.name.toLowerCase() : currentUser.name,
@@ -41,7 +41,7 @@ export class UserRepository {
   }
 
   async remove(id: number): Promise<User> {
-    const where: Prisma.UserWhereUniqueInput = { id: Number(id) };
+    const where: Prisma.UserWhereUniqueInput = { id };
     return this.prisma.user.delete({
       where,
     });
