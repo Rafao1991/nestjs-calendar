@@ -34,7 +34,7 @@ model Event {
 
 model EventAttendee {
   id         Int     @id @default(autoincrement())
-  Event      Event   @relation(fields: [eventId], references: [id])
+  event      Event   @relation(fields: [eventId], references: [id])
   eventId    Int
   attendee   User    @relation(fields: [userId], references: [id])
   userId     Int
@@ -43,7 +43,7 @@ model EventAttendee {
 
 model Reminder {
   id        Int            @id @default(autoincrement())
-  Event     Event          @relation(fields: [eventId], references: [id])
+  event     Event          @relation(fields: [eventId], references: [id])
   eventId   Int
   remindeAt DateTime
   user      ReminderUser[]
